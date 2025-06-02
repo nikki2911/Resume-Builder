@@ -26,25 +26,25 @@ from datetime import (
 )
 load_dotenv()
 
-GOOGLE_APPLICATION_CREDENTIALS = "resume-builder-460911-f564a03eaac0.json"
+# GOOGLE_APPLICATION_CREDENTIALS = "resume-builder-460911-f564a03eaac0.json"
 
 # Initialize Firebase Admin SDK (only once)
-if not firebase_admin._apps:
-    # Check if the app is already initialized to avoid re-initialization errors
-    # When running locally, use the service account key file:
-    cred = credentials.Certificate(GOOGLE_APPLICATION_CREDENTIALS)
-    firebase_admin.initialize_app(cred)
+# if not firebase_admin._apps:
+#     # Check if the app is already initialized to avoid re-initialization errors
+#     # When running locally, use the service account key file:
+#     cred = credentials.Certificate(GOOGLE_APPLICATION_CREDENTIALS)
+#     firebase_admin.initialize_app(cred)
     # When deployed on Google Cloud, use default credentials:
     # firebase_admin.initialize_app()
 
-db = firestore.client()
+# db = firestore.client()
 
 # Now you can use the 'db' object to interact with Firestore
 # Example:
-def add_data(collection_name, document_id, data):
-    doc_ref = db.collection(collection_name).document(document_id)
-    doc_ref.set(data)
-    st.success(f"Data added to {collection_name}/{document_id}")
+# def add_data(collection_name, document_id, data):
+#     doc_ref = db.collection(collection_name).document(document_id)
+#     doc_ref.set(data)
+#     st.success(f"Data added to {collection_name}/{document_id}")
 
 st.set_page_config(
     page_title="Ex-stream-ly Cool App",
@@ -127,15 +127,14 @@ else:
     print('log', st.user.sub)
     col1, col2 = st.columns([7,1])
     with col1:
-        st.header(f"Welcome, {st.user.name}")
+        st.subheader(f"Welcome, {st.user.name}")
 
     with col2:
         st.button("Log out", on_click=st.logout)
-    st.header("Enhance Resume with Gemini", divider="gray")
+    st.header("ATSExpert AI", divider="gray")
     # text_model_flash = load_models()
 
-    st.write("Using Gemini Flash - Text only model")
-    st.subheader("AI Resume Enhancer")
+    st.markdown("**Unlock the ATS, Unlock your Career!**")
     # st.button("Log out", on_click=st.logout)
 
     # cuisine = st.selectbox(
