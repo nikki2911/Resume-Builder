@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 .streamlit/secrets.toml
+resume-builder-460911-f564a03eaac0.json
 # C extensions
 *.so
 
@@ -131,9 +132,9 @@ celerybeat.pid
 # Environments
 .env
 .venv
-env/
+.env/
 venv/
-ENV/
+.env/
 env.bak/
 venv.bak/
 

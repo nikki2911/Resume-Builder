@@ -18,12 +18,33 @@ from streamlit_extras.stylable_container import stylable_container
 import plotly.express as px
 import plotly.graph_objects as go
 from st_copy_to_clipboard import st_copy_to_clipboard
-
+import firebase_admin
+from firebase_admin import credentials, firestore
 from datetime import (
     date,
     timedelta,
 )
 load_dotenv()
+
+GOOGLE_APPLICATION_CREDENTIALS = "resume-builder-460911-f564a03eaac0.json"
+
+# Initialize Firebase Admin SDK (only once)
+if not firebase_admin._apps:
+    # Check if the app is already initialized to avoid re-initialization errors
+    # When running locally, use the service account key file:
+    cred = credentials.Certificate(GOOGLE_APPLICATION_CREDENTIALS)
+    firebase_admin.initialize_app(cred)
+    # When deployed on Google Cloud, use default credentials:
+    # firebase_admin.initialize_app()
+
+db = firestore.client()
+
+# Now you can use the 'db' object to interact with Firestore
+# Example:
+def add_data(collection_name, document_id, data):
+    doc_ref = db.collection(collection_name).document(document_id)
+    doc_ref.set(data)
+    st.success(f"Data added to {collection_name}/{document_id}")
 
 st.set_page_config(
     page_title="Ex-stream-ly Cool App",
@@ -103,6 +124,7 @@ def login_screen():
 if not st.user.is_logged_in:
     login_screen()
 else:
+    print('log', st.user.sub)
     col1, col2 = st.columns([7,1])
     with col1:
         st.header(f"Welcome, {st.user.name}")
