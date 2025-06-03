@@ -26,25 +26,46 @@ from datetime import (
 )
 load_dotenv()
 
-# GOOGLE_APPLICATION_CREDENTIALS = "resume-builder-460911-f564a03eaac0.json"
+GOOGLE_APPLICATION_CREDENTIALS = "resume-builder-460911-f564a03eaac0.json"
 
 # Initialize Firebase Admin SDK (only once)
-# if not firebase_admin._apps:
-#     # Check if the app is already initialized to avoid re-initialization errors
-#     # When running locally, use the service account key file:
-#     cred = credentials.Certificate(GOOGLE_APPLICATION_CREDENTIALS)
-#     firebase_admin.initialize_app(cred)
+if not firebase_admin._apps:
+    # Check if the app is already initialized to avoid re-initialization errors
+    # When running locally, use the service account key file:
+    cred = credentials.Certificate(GOOGLE_APPLICATION_CREDENTIALS)
+    firebase_admin.initialize_app(cred)
     # When deployed on Google Cloud, use default credentials:
     # firebase_admin.initialize_app()
 
-# db = firestore.client()
+db = firestore.client()
 
 # Now you can use the 'db' object to interact with Firestore
 # Example:
-# def add_data(collection_name, document_id, data):
-#     doc_ref = db.collection(collection_name).document(document_id)
-#     doc_ref.set(data)
-#     st.success(f"Data added to {collection_name}/{document_id}")
+def add_data(user_id, data):
+    history_ref = db.collection('users').document(user_id).collection('history')
+
+    history_ref.add({
+        'timestamp': firestore.SERVER_TIMESTAMP,  # Use server timestamp for accuracy
+        'data': data,
+        'type': "generated_data"
+    })
+    st.success("History item saved!")
+
+def get_user_history(user_id, limit=5):
+    if not user_id:
+        return []
+
+    history_ref = db.collection('users').document(user_id).collection('history')
+    # Order by timestamp descending to get most recent items first
+    docs = history_ref.order_by('timestamp', direction=firestore.Query.DESCENDING).limit(limit).stream()
+    history_items = []
+    for doc in docs:
+        item_data = doc.to_dict()
+        # Convert Firestore Timestamp to readable format if needed for display
+        if 'timestamp' in item_data and isinstance(item_data['timestamp'], firestore.SERVER_TIMESTAMP.__class__):
+             item_data['timestamp'] = item_data['timestamp'].astimezone().strftime("%Y-%m-%d %H:%M:%S")
+        history_items.append(item_data)
+    return history_items
 
 st.set_page_config(
     page_title="Ex-stream-ly Cool App",
@@ -124,7 +145,6 @@ def login_screen():
 if not st.user.is_logged_in:
     login_screen()
 else:
-    print('log', st.user.sub)
     col1, col2 = st.columns([7,1])
     with col1:
         st.subheader(f"Welcome, {st.user.name}")
@@ -533,7 +553,7 @@ else:
                             # You might need to adjust the button's appearance or add a small margin if it's too close
                             st_copy_to_clipboard(suggested_text_for_copy)
                     # st.write("Objectives : ", response['overall_enhanced_resume_sections']['projects'])
-
+                add_data(st.user.sub, response)
                 logging.info(response)
 
 
