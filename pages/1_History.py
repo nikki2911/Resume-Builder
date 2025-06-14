@@ -8,7 +8,7 @@ import os
 import streamlit as st
 from dotenv import load_dotenv
 from streamlit_extras.stylable_container import stylable_container
-from ATSExpert_AI import login_screen
+from ATSExpert_AI import login_google_button_ui
 from generate_response import generatedResponse
 load_dotenv()
 
@@ -58,10 +58,12 @@ def _get_display_name_for_history_item(item_data):
     return f"{name_parts} {timestamp_str}"
 
 
-if not st.user.is_logged_in:
-    login_screen()
+if not st.login:
+    login_google_button_ui()
 else:
-    history_items = get_user_history(st.user.sub)
+    user_info = st.user
+    user_id = user_info.get("sub")
+    history_items = get_user_history(user_id)
     if history_items:
         # Create a list of display names for the selectbox
         display_options = [_get_display_name_for_history_item(item) for item in history_items]
