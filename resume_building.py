@@ -332,59 +332,18 @@ else:
             #     prompt
             # ])
             # print("tokens", tokens)
-            # response = client.models.generate_content(model="gemini-2.0-flash-001", contents=[
-            #     Part.from_bytes(data=resume_bytes_data, mime_type="application/pdf"),
-            #     job_description,
-            #     prompt
-            #     ],
-            #     config=GenerateContentConfig(
-            #         response_mime_type="application/json",
-            #         response_schema=response_schema,
-            #         max_output_tokens=1500,
-            #         temperature=0.2
-            #     ))
-            response = {'current_ats_score': 65,
-                        'overall_enhanced_resume_sections':
-                            {'summary_or_objective':
-                                 {'original_text': 'Python Developer with 1 year of experience in web '
-                                                   'development and Al-powered solutions using Django and ChatGPT '
-                                                   'API. Passionate about web development, automation, and Al.',
-                                  'suggested_text': 'Proficient Python Developer with 1 year of experience in '
-                                                    'developing and maintaining ML/CV pipelines and applications. '
-                                                    'Solid understanding of Machine Learning concepts and experience '
-                                                    'with ML frameworks (e.g., TensorFlow, PyTorch, scikit-learn). '
-                                                    'Practical experience in Computer Vision, including techniques such '
-                                                    'as image segmentation, feature extraction, object detection, '
-                                                    'and recognition.'},
-                             'experience': [
-                                 {'original_text': 'Developed an Al-powered Applicant Tracking System (ATS) using Django.',
-                                  'suggested_text': 'Developed and maintained Python-based ML/CV pipelines and applications '
-                                                    'using Django, enhancing the Applicant Tracking System (ATS).'},
-                                 {'original_text': 'Integrated Azure for cloud deployment to ensure scalability and '
-                                                   'reliability.',
-                                  'suggested_text': 'Deployed models into production environments using Azure, '
-                                                    'ensuring scalability and reliability.'}],
-                             'skills': [
-                                 {'original_text': 'Al & Data Analysis: ChatGPT API, Data Visualization, NLP (SpaCy), Pandas',
-                                  'suggested_text': 'Machine Learning: TensorFlow, PyTorch, scikit-learn. Computer Vision: Image'
-                                                    ' segmentation, feature extraction, object detection, and recognition.'},
-                                 {'original_text': 'Cloud & Deployment: Azure',
-                                  'suggested_text': 'Cloud Platforms: Azure. Containerization: Docker.'},
-                                 {'original_text': 'Programming Languages : Python, C, MATLAB, Verilog HDL',
-                                  'suggested_text': 'Programming Languages: Python, NumPy, OpenCV, Pandas.'}],
-                             'projects': [
-                                 {'original_text': 'Integrated ChatGPT API for candidate analysis reports with interactive '
-                                                   'data visualization.',
-                                  'suggested_text': 'Designed and implemented computer vision algorithms for tasks like '
-                                                    'object detection, tracking, image classification, OCR, etc. '
-                                                    'Integrated ChatGPT API for candidate analysis reports with '
-                                                    'interactive data visualization.'}]}}
+            response = client.models.generate_content(model="gemini-2.0-flash-001", contents=[
+                Part.from_bytes(data=resume_bytes_data, mime_type="application/pdf"),
+                job_description,
+                prompt
+                ],
+                config=GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=response_schema,
+                    max_output_tokens=3000,
+                    temperature=0.2
+                ))
 
-            # response = { "current_ats_score": 35, "overall_enhanced_resume_sections":
-            #     { "summary_or_objective": "Highly motivated Python Developer with 1 year of experience in web development and AI-powered solutions using Django and ChatGPT API. Seeking to leverage expertise in data science, machine learning, and cloud platforms (Azure) to contribute to large-scale data processing pipelines and innovative machine learning algorithm development.",
-            #       "experience": [ "Developed and maintained an AI-powered Applicant Tracking System (ATS) using Django, optimizing it for large-scale data processing and seamless integration with cloud platforms like Azure.", "Guided a junior developer in creating an internal attendance system, ensuring code quality through rigorous code reviews and adherence to Python best practices.", "Led a team of 2 developers to build a resume-making website, implementing practical solutions for debugging and troubleshooting Python-related queries.", "Integrated Azure for cloud deployment to ensure scalability and reliability, utilizing a working understanding of cloud platforms to create robust and efficient systems." ],
-            #       "skills": [ "Programming Languages: Python (Expert), C, MATLAB, Verilog HDL", "Web Development: Django, Flask, Pyramid, JavaScript, HTML, CSS, Bootstrap", "AI & Data Analysis: ChatGPT API, Data Visualization, NLP (SpaCy), Pandas, scikit-learn", "Cloud & Deployment: Azure, AWS, Google Cloud", "Databases: PostgreSQL, SQLite", "Embedded Systems: Microcontrollers (ARM, AVR), Raspberry Pi", "Communication Protocols: UART, SPI, I2C", "Software Development Tools: Pycharm, MATLAB, Arduino IDE, Thonny, Xilinx ISE Design Suite", "Version Control: Git" ],
-            #       "projects": [ "AI-Powered Applicant Tracking System (ATS): Built an ATS using Django to streamline recruitment workflows and create large-scale data processing pipelines. Integrated ChatGPT API for candidate analysis reports with interactive data visualization, enhancing the system's ability to build and train novel machine learning algorithms.", "Line Following Robot: Built a two-wheel robot using Arduino Nano, IR sensors, and an L293D motor driver.", "Pi Pico Retrogaming Gameboy: Designed a Raspberry Pi-based retro gaming console to emulate classic games." ] } }
             if response:
                 st.markdown(":green[Response Generated!:white_check_mark:]")
 
