@@ -573,46 +573,9 @@ else:
                         max_output_tokens=1500,
                         temperature=0.2
                     ))
-                # response = {'current_ats_score': 65,
-                #             'overall_enhanced_resume_sections':
-                #                 {'summary_or_objective':
-                #                      {'original_text': 'Python Developer with 1 year of experience in web '
-                #                                        'development and Al-powered solutions using Django and ChatGPT '
-                #                                        'API. Passionate about web development, automation, and Al.',
-                #                       'suggested_text': 'Proficient Python Developer with 1 year of experience in '
-                #                                         'developing and maintaining ML/CV pipelines and applications. '
-                #                                         'Solid understanding of Machine Learning concepts and experience '
-                #                                         'with ML frameworks (e.g., TensorFlow, PyTorch, scikit-learn). '
-                #                                         'Practical experience in Computer Vision, including techniques such '
-                #                                         'as image segmentation, feature extraction, object detection, '
-                #                                         'and recognition.'},
-                #                  'experience': [
-                #                      {'original_text': 'Developed an Al-powered Applicant Tracking System (ATS) using Django.',
-                #                       'suggested_text': 'Developed and maintained Python-based ML/CV pipelines and applications '
-                #                                         'using Django, enhancing the Applicant Tracking System (ATS).'},
-                #                      {'original_text': 'Integrated Azure for cloud deployment to ensure scalability and '
-                #                                        'reliability.',
-                #                       'suggested_text': 'Deployed models into production environments using Azure, '
-                #                                         'ensuring scalability and reliability.'}],
-                #                  'skills': [
-                #                      {'original_text': 'Al & Data Analysis: ChatGPT API, Data Visualization, NLP (SpaCy), Pandas',
-                #                       'suggested_text': 'Machine Learning: TensorFlow, PyTorch, scikit-learn. Computer Vision: Image'
-                #                                         ' segmentation, feature extraction, object detection, and recognition.'},
-                #                      {'original_text': 'Cloud & Deployment: Azure',
-                #                       'suggested_text': 'Cloud Platforms: Azure. Containerization: Docker.'},
-                #                      {'original_text': 'Programming Languages : Python, C, MATLAB, Verilog HDL',
-                #                       'suggested_text': 'Programming Languages: Python, NumPy, OpenCV, Pandas.'}],
-                #                  'projects': [
-                #                      {'original_text': 'Integrated ChatGPT API for candidate analysis reports with interactive '
-                #                                        'data visualization.',
-                #                       'suggested_text': 'Designed and implemented computer vision algorithms for tasks like '
-                #                                         'object detection, tracking, image classification, OCR, etc. '
-                #                                         'Integrated ChatGPT API for candidate analysis reports with '
-                #                                         'interactive data visualization.'}]}}
 
                 if response:
                     st.markdown(":green[Response Generated!:white_check_mark:]")
-
 
                     response = json.loads(response.text)  # dict
                     # # response1 = json.dumps(json_response, indent=2)
