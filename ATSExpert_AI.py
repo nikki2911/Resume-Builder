@@ -316,6 +316,9 @@ else:
                     # st.text(response)
                     # print(type(response1))
                     response = response.candidates[0].content.parts[0].text
+                    st.subheader("Raw Response")
+                    st.text(response)
+
                     response = json.loads(response)  # dict
 
                     de_dulpicate_key = generatedResponse(response)
