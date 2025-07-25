@@ -312,7 +312,7 @@ else:
                 if response:
                     st.markdown(":green[Response Generated!:white_check_mark:]")
 
-                    response = json.loads(response.text)  # dict
+                    # response = json.loads(response.text)  # dict
                     # # response1 = json.dumps(json_response, indent=2)
                     # st.text(response)
                     # print(type(response1))
