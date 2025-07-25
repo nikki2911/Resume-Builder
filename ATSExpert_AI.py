@@ -316,7 +316,7 @@ else:
                     # # response1 = json.dumps(json_response, indent=2)
                     # st.text(response)
                     # print(type(response1))
-                    response = response.candidates[0].content.parts[0].data
+                    response = response.candidates[0].content.parts[0].text
                     de_dulpicate_key = generatedResponse(response)
                     # st.write("Objectives : ", response['overall_enhanced_resume_sections']['projects'])
                     add_data(user_id, de_dulpicate_key, response)
