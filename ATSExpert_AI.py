@@ -165,25 +165,15 @@ else:
 
         # Task 2.6
         # Modify this prompt with the custom chef prompt.
-        prompt = f""""You are an expert AI resume reviewer trained for ATS (Applicant Tracking System) optimization.
-        Your tasks:
-        1. Compare the provided resume (PDF) with the given job description (text).
-        2. Based on relevance of skills, experience, job title match, and keywords:
-           - Calculate a score called `current_ats_score` between 0 to 100.
-           - This score should reflect how well the resume aligns with the job description.
-           - For poor matches (e.g., unrelated jobs/skills), score < 40.
-           - For perfect matches (skills/keywords/title all align), score > 85.
-        3. Suggest improvements in the following sections:
-           - Summary or objective
-           - Experience
-           - Skills
-           - Projects
-        4. For each section, return both:
-           - `original_text` (from the resume)
-           - `suggested_text` (how to rewrite it for better ATS matching)
-        Return your output in this JSON schema:
-        - `current_ats_score`: number (0-100)
-        - `overall_enhanced_resume_sections`: with structured suggestions as described.
+        prompt = f""""I need to optimize my resume to maximize its ATS (Applicant Tracking System) 
+        compatibility for a given job description.
+        Please perform the following:
+        Calculate my current ATS score by comparing my provided resume against the given job description.
+        Identify specific areas for improvement in my resume's content, focusing on keywords, phrasing, 
+        and alignment with the job description.
+        For each identified area, provide the exact rephrased or new sentences that would 
+        enhance my resume and boost the ATS score.
+        do not reuse score 65. ats score must vary
         """
         response_schema = {
             "type": "OBJECT",
