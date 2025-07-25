@@ -305,7 +305,7 @@ else:
                   config=GenerateContentConfig(
                       response_mime_type="application/json",
                       response_schema=response_schema,
-                      max_output_tokens=1500,
+                      max_output_tokens=3000,
                       temperature=0.2
                   ))
 
@@ -316,6 +316,10 @@ else:
                     # st.text(response)
                     # print(type(response1))
                     raw_text = response.candidates[0].content.parts[0].text
+                    finish_reason = response.candidates[0].finish_reason
+                    if finish_reason == "MAX_TOKENS":
+                        st.error("Gemini hit max_output_tokens and could not finish the response.")
+                        st.stop()
 
                     # Display raw response in Streamlit
                     st.subheader("Raw Response")
