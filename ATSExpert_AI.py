@@ -320,11 +320,10 @@ else:
                     # Display raw response in Streamlit
                     st.subheader("Raw Response")
                     st.write(raw_text)
-                    st.code(raw_text, language='json')
 
-                    # response = json.loads(raw_text)  # dict
+                    response = json.loads(raw_text)  # dict
 
-                    de_dulpicate_key = generatedResponse(raw_text)
+                    de_dulpicate_key = generatedResponse(response)
                     # st.write("Objectives : ", response['overall_enhanced_resume_sections']['projects'])
                     add_data(user_id, de_dulpicate_key, response)
                     logging.info(response)
