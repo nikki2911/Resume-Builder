@@ -305,7 +305,6 @@ else:
                   config=GenerateContentConfig(
                       response_mime_type="application/json",
                       response_schema=response_schema,
-                      max_output_tokens=3000,
                       temperature=0.2
                   ))
 
