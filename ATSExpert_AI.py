@@ -319,7 +319,8 @@ else:
 
                     # Display raw response in Streamlit
                     st.subheader("Raw Response")
-                    st.write(raw_text)
+                    st.text(response)
+                    st.text(response.candidates[0].content.parts[0])
 
                     response = json.loads(raw_text)  # dict
 
