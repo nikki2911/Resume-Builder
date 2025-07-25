@@ -1,4 +1,3 @@
-
 # Free Tier
 # Requests per minute (RPM)
 # Requests per day (RPD)
@@ -20,12 +19,13 @@ import plotly.graph_objects as go
 from st_copy_to_clipboard import st_copy_to_clipboard
 import firebase_admin
 from firebase_admin import credentials, firestore
-from datetime import date, timedelta,datetime, timezone
+from datetime import date, timedelta, datetime, timezone
 from generate_response import generatedResponse
 import json
 import base64
 
 import requests
+
 load_dotenv()
 
 # GOOGLE_APPLICATION_CREDENTIALS = "resume-builder-460911-f564a03eaac0.json"
@@ -45,6 +45,7 @@ if not firebase_admin._apps:
     # firebase_admin.initialize_app()
 
 db = firestore.client()
+
 
 # Now you can use the 'db' object to interact with Firestore
 # Example:
@@ -69,7 +70,7 @@ def get_daily_response_count(user_id):
     query = history_ref \
         .where('timestamp', '>=', today_start_utc) \
         .where('timestamp', '<=', today_end_utc) \
-        .where('type', '==', "generated_data") # Assuming your Gemini responses fall under a specific type
+        .where('type', '==', "generated_data")  # Assuming your Gemini responses fall under a specific type
 
     docs = query.stream()
     count = 0
@@ -77,21 +78,21 @@ def get_daily_response_count(user_id):
         count += 1
     return count
 
-def add_data(user_id,de_dulpicate_key, data):
+
+def add_data(user_id, de_dulpicate_key, data):
     history_ref = db.collection('users').document(user_id).collection('history')
-    query = history_ref.where(f'data.overall_enhanced_resume_sections.{de_dulpicate_key}', '==', data["overall_enhanced_resume_sections"][de_dulpicate_key])
+    query = history_ref.where(f'data.overall_enhanced_resume_sections.{de_dulpicate_key}', '==',
+                              data["overall_enhanced_resume_sections"][de_dulpicate_key])
     existing_docs = query.limit(1).get()
     if len(existing_docs) > 0:
         print("exist")
         return
-
 
     history_ref.add({
         'timestamp': firestore.SERVER_TIMESTAMP,  # Use server timestamp for accuracy
         'data': data,
         'type': "generated_data"
     })
-
 
 
 st.set_page_config(
@@ -105,6 +106,8 @@ st.set_page_config(
     #     'About': "# This is a header. This is an *extremely* cool app!",
     # }
 )
+
+
 # def login_screen():
 #     st.header("This app is private.")
 #     st.subheader("Please log in.")
@@ -158,7 +161,6 @@ st.set_page_config(
 # --- 3. Google OAuth Flow Functions ---
 
 
-
 # if "user" not in st.session_state:
 #     st.session_state.user = None
 # if "credentials" not in st.session_state:
@@ -183,8 +185,6 @@ st.set_page_config(
 #     )
 #     st.session_state.credentials = credentials
 #     st.session_state.user = id_info
-
-
 
 
 # if st.sidebar.button("Logout", type="primary"):
@@ -378,7 +378,7 @@ else:
     user_name = user_info.get("name")  # User's display name
 
     DAILY_RESPONSE_LIMIT = 3
-    col1, col2 = st.columns([7,1])
+    col1, col2 = st.columns([7, 1])
     with col1:
         st.subheader(f"Welcome, {user_name}")
 
@@ -413,7 +413,6 @@ else:
         if resume is not None:
             # To read file as bytes:
             resume_bytes_data = resume.getvalue()
-
 
         # Task 2.5
         # Complete Streamlit framework code for the user interface, add the wine preference radio button to the interface.
@@ -453,9 +452,9 @@ else:
                             "description": "original text and enhanced text of objectives",
                             "properties": {
                                 "original_text": {
-                                        "type": "STRING",
-                                        "description": "An example snippet from the original resume text that needs improvement."
-                                    },
+                                    "type": "STRING",
+                                    "description": "An example snippet from the original resume text that needs improvement."
+                                },
                                 "suggested_text": {
                                     "type": "STRING",
                                     "description": "The enhanced summary or objective statement."
@@ -469,7 +468,7 @@ else:
                             "items": {
                                 "type": "OBJECT",
                                 "properties": {
-                                    "original_text":{
+                                    "original_text": {
                                         "type": "STRING",
                                         "description": "An example snippet of experience from the original resume text that needs improvement."
                                     },
@@ -487,7 +486,7 @@ else:
                             "items": {
                                 "type": "OBJECT",
                                 "properties": {
-                                    "original_text":{
+                                    "original_text": {
                                         "type": "STRING",
                                         "description": "An example snippet of skills from the original resume text that needs improvement."
                                     },
@@ -505,7 +504,7 @@ else:
                             "items": {
                                 "type": "OBJECT",
                                 "properties": {
-                                    "original_text":{
+                                    "original_text": {
                                         "type": "STRING",
                                         "description": "An example snippet of projects from the original resume text that needs improvement."
                                     },
@@ -524,10 +523,9 @@ else:
             "required": ["current_ats_score", "overall_enhanced_resume_sections"]
         }
 
-
         with stylable_container(
-            key="green_button",
-            css_styles="""
+                key="green_button",
+                css_styles="""
                 button {
                     background-color: #3683ff;
                     color: white;
@@ -566,13 +564,13 @@ else:
                     Part.from_bytes(data=resume_bytes_data, mime_type="application/pdf"),
                     job_description,
                     prompt
-                    ],
-                    config=GenerateContentConfig(
-                        response_mime_type="application/json",
-                        response_schema=response_schema,
-                        max_output_tokens=1500,
-                        temperature=0.2
-                    ))
+                ],
+                                                          config=GenerateContentConfig(
+                                                              response_mime_type="application/json",
+                                                              response_schema=response_schema,
+                                                              max_output_tokens=1500,
+                                                              temperature=0.2
+                                                          ))
 
                 if response:
                     st.markdown(":green[Response Generated!:white_check_mark:]")
@@ -582,15 +580,11 @@ else:
                     # st.text(response)
                     # print(type(response1))
                     de_dulpicate_key = generatedResponse(response)
-                        # st.write("Objectives : ", response['overall_enhanced_resume_sections']['projects'])
-                    add_data(user_id,de_dulpicate_key, response)
+                    # st.write("Objectives : ", response['overall_enhanced_resume_sections']['projects'])
+                    add_data(user_id, de_dulpicate_key, response)
                     logging.info(response)
-
 
                 # with first_tab2:
                 #     st.text(prompt)
-        else :
+        else:
             st.warning("Please Enter Resume and Job Description to Proceed.")
-
-
-
