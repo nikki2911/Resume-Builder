@@ -297,7 +297,7 @@ else:
                 #     prompt
                 # ])
                 # print("tokens", tokens)
-                response = client.models.generate_content(model="gemini-2.5-flash-001", contents=[
+                response = client.models.generate_content(model="gemini-2.5-flash", contents=[
                     Part.from_bytes(data=resume_bytes_data, mime_type="application/pdf"),
                     job_description,
                     prompt
