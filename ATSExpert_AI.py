@@ -315,11 +315,13 @@ else:
                     # # response1 = json.dumps(json_response, indent=2)
                     # st.text(response)
                     # print(type(response1))
-                    response = response.candidates[0].content.parts[0].text
-                    st.subheader("Raw Response")
-                    st.text(response)
+                    raw_text = response.candidates[0].content.parts[0].text
 
-                    response = json.loads(response)  # dict
+                    # Display raw response in Streamlit
+                    st.subheader("Raw Response")
+                    st.code(raw_text, language='json')
+
+                    response = json.loads(raw_text)  # dict
 
                     de_dulpicate_key = generatedResponse(response)
                     # st.write("Objectives : ", response['overall_enhanced_resume_sections']['projects'])
