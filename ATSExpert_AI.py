@@ -6,7 +6,7 @@
 
 # Model	                RPM	        TPM	            RPD
 # Gemini 2.0 Flash	    15	        1,000,000	    1,500
-
+# Gemini 2.5 Flash	    10	        250,000	        250
 import os
 import streamlit as st
 import logging
@@ -107,131 +107,6 @@ st.set_page_config(
     # }
 )
 
-
-# def login_screen():
-#     st.header("This app is private.")
-#     st.subheader("Please log in.")
-#     with stylable_container(
-#             key="login_button",
-#             css_styles="""
-#                 button {
-#                     background-color: #3683ff;
-#                     color: white;
-#                     border-radius: 4px;
-#                     border: None;
-#                 }
-#                 button:hover {
-#                     background-color: #003891;
-#                     color: white !important;
-#                     border: None;
-#                 }
-#                 button:focus {
-#                     background-color: #003891 !important;
-#                     color: white !important;
-#                     border: None;
-#                 }
-#                 """,
-#     ):
-#         st.button("Log in with Google", on_click=st.login)
-
-
-# --- 2. Google OAuth Credentials from st.secrets ---
-# These will come from .streamlit/secrets.toml locally,
-# and from environment variables (AUTH_GOOGLE_CLIENT_ID etc.) on Cloud Run.
-# try:
-#     # Accessing secrets using the section name 'auth' and key names
-#     GOOGLE_CLIENT_ID = os.getenv("AUTH_GOOGLE_CLIENT_ID")
-#     GOOGLE_CLIENT_SECRET = os.getenv("AUTH_GOOGLE_CLIENT_SECRET")
-#     # IMPORTANT: The REDIRECT_URI must match exactly what you set in Google Cloud Console
-#     # For local: http://localhost:8501/oauth2callback
-#     # For Cloud Run: https://YOUR_CLOUD_RUN_URL/oauth2callback
-#     REDIRECT_URI = os.getenv("AUTH_REDIRECT_URI")
-# except AttributeError as e:
-#     st.error(f"Authentication secrets are missing or malformed in "
-#              f".streamlit/secrets.toml (local) or environment variables (Cloud Run). Error: {e}")
-#     st.info("Please ensure your secrets.toml has a [auth] section with "
-#             "google_client_id, google_client_secret, and redirect_uri.")
-#     st.stop()
-#
-# if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET or not REDIRECT_URI:
-#     st.error("Google OAuth credentials (Client ID, Client Secret, or Redirect URI) are not fully set.")
-#     st.stop()
-
-
-# --- 3. Google OAuth Flow Functions ---
-
-
-# if "user" not in st.session_state:
-#     st.session_state.user = None
-# if "credentials" not in st.session_state:
-#     st.session_state.credentials = None
-#
-#
-# def login_callback():
-#     credentials = get_user_credentials(
-#         scopes=[
-#             "openid",
-#             "https://www.googleapis.com/auth/userinfo.email",
-#             "https://www.googleapis.com/auth/userinfo.profile",
-#         ],
-#         client_id=GOOGLE_CLIENT_ID,
-#         client_secret=GOOGLE_CLIENT_SECRET,
-#         # limit redirect URI server to http://localhost:9000
-#         redirect_uri=REDIRECT_URI
-#     )
-#     id_info = id_token.verify_token(
-#         credentials.id_token,
-#         requests.Request(),
-#     )
-#     st.session_state.credentials = credentials
-#     st.session_state.user = id_info
-
-
-# if st.sidebar.button("Logout", type="primary"):
-#     st.session_state["user"] = None
-#     st.session_state["credentials"] = None
-#     st.rerun()
-
-
-# def get_google_auth_url():
-#     """Generates the Google OAuth authorization URL."""
-#     return (
-#         f"https://accounts.google.com/o/oauth2/auth?"
-#         f"client_id={GOOGLE_CLIENT_ID}&"
-#         f"redirect_uri={REDIRECT_URI}&"
-#         f"response_type=code&"
-#         f"scope=email%20profile%20openid&"  # Request basic user info (email, name)
-#         f"access_type=offline&"  # Optional: to get refresh token for long-lived access
-#         f"prompt=consent"  # Optional: force consent screen each time
-#     )
-#
-#
-#
-# def exchange_code_for_tokens(auth_code):
-#     """Exchanges authorization code for access and ID tokens."""
-#     token_url = "https://oauth2.googleapis.com/token"
-#     payload = {
-#         "code": auth_code,
-#         "client_id": GOOGLE_CLIENT_ID,
-#         "client_secret": GOOGLE_CLIENT_SECRET,
-#         "redirect_uri": REDIRECT_URI,
-#         "grant_type": "authorization_code",
-#     }
-#     headers = {"Content-Type": "application/x-www-form-urlencoded"}
-#     response = requests.post(token_url, data=payload, headers=headers)
-#     response.raise_for_status()  # Raise an exception for HTTP errors (e.g., 400 Bad Request)
-#     return response.json()
-
-
-# def get_user_info(access_token):
-#     """Fetches user profile information using the access token."""
-#     userinfo_url = "https://www.googleapis.com/oauth2/v3/userinfo"
-#     headers = {"Authorization": f"Bearer {access_token}"}
-#     response = requests.get(userinfo_url, headers=headers)
-#     response.raise_for_status()  # Raise an exception for HTTP errors
-#     return response.json()
-
-
 def login_google_button_ui():
     """Displays the styled 'Log in with Google' button."""
     st.header("This app is private.")
@@ -240,135 +115,7 @@ def login_google_button_ui():
         "🔑 Login with Google",
         on_click=st.login
     )
-    # Your custom styling for the button
-    # with st.container():  # Use st.container for general styling context
-    #     st.markdown(
-    #         f"""
-    #         <style>
-    #         .stButton > button {{
-    #             background-color: #3683ff;
-    #             color: white;
-    #             border-radius: 4px;
-    #             border: None;
-    #             padding: 10px 20px;
-    #             font-size: 16px;
-    #             cursor: pointer;
-    #         }}
-    #         .stButton > button:hover {{
-    #             background-color: #003891;
-    #             color: white !important; /* Ensure hover color applies */
-    #             border: None;
-    #         }}
-    #         .stButton > button:focus:not(:active) {{ /* Apply focus style only when not active */
-    #             background-color: #003891 !important;
-    #             color: white !important;
-    #             border: None;
-    #             box-shadow: 0 0 0 2px #3683ff; /* Example focus ring */
-    #         }}
-    #         </style>
-    #         """,
-    #         unsafe_allow_html=True
-    #     )
-    #     # Display the link which will redirect to Google's auth page
-    #     auth_url = get_google_auth_url()
-    #     print(auth_url)
-    #     st.markdown(f'<a href="{auth_url}" target="_self" style="text-decoration: none;">'
-    #                 '<button>'
-    #                 'Log in with Google'
-    #                 '</button>'
-    #                 '</a>', unsafe_allow_html=True)
 
-
-# --- 4. Main Streamlit App Logic (Authentication & Content Display) ---
-
-
-# Initialize session state variables if they don't exist
-# This manages the login state across reruns
-# if "logged_in" not in st.session_state:
-#     st.session_state["logged_in"] = False
-# if "user_info" not in st.session_state:
-#     st.session_state["user_info"] = None
-# if "access_token" not in st.session_state:
-#     st.session_state["access_token"] = None
-
-# Check for authorization code in URL parameters (after redirect from Google)
-# query_params = st.query_params
-# auth_code = query_params.get("code")
-
-# if auth_code:
-#     # If we received an auth code, try to exchange it for tokens and get user info
-#     try:
-#         tokens = exchange_code_for_tokens(auth_code)
-#         access_token = tokens.get("access_token")
-#
-#         user_info = get_user_info(access_token)
-#
-#         st.session_state["user_info"] = user_info
-#         st.session_state["logged_in"] = True
-#         st.session_state["access_token"] = access_token
-#
-#         st.success(f"Successfully logged in as {user_info.get('email', 'User')}!")
-#
-#         # Clear query parameters to prevent re-login loop on refresh
-#         st.query_params.clear()
-#         st.rerun()  # Re-run the app to reflect the new login state
-#
-#     except requests.exceptions.RequestException as e:
-#         st.error(
-#             f"Authentication failed during token exchange or user info fetch. Please check your credentials and network. Error: {e}")
-#         st.session_state["logged_in"] = False
-#         st.session_state["user_info"] = None
-#         st.error("Please try logging in again.")
-#         login_google_button_ui()  # Show login button again on failure
-#     except Exception as e:
-#         st.error(f"An unexpected error occurred during authentication: {e}")
-#         st.session_state["logged_in"] = False
-#         st.session_state["user_info"] = None
-#         st.error("Please try logging in again.")
-#         login_google_button_ui()  # Show login button again on failure
-# @st.cache_resource
-# def load_models():
-#     text_model_flash = "gemini-2.0-flash-001"
-#     return text_model_flash
-#
-#
-# def get_gemini_flash_text_response(
-#     model,
-#     contents: str,
-#     generation_config: GenerationConfig,
-#     stream: bool = True,
-# ):
-#     safety_settings = {
-#         HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-#         HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
-#         HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE,
-#         HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
-#     }
-#
-#     responses = model.generate_content(
-#         prompt,
-#         generation_config=generation_config,
-#         safety_settings=safety_settings,
-#         stream=stream,
-#     )
-#
-#
-#     final_response = []
-#     for response in responses:
-#         try:
-#             # st.write(response.text)
-#             final_response.append(response.text)
-#         except IndexError:
-#             # st.write(response)
-#             final_response.append("")
-#             continue
-#     return " ".join(final_response)
-# if not st.session_state.user:
-#     login_google_button_ui()
-#     st.stop()
-# elif not st.session_state["logged_in"]:
-#     # User is not logged in and no auth code present, show login button UI
-#     login_google_button_ui()
 
 if not st.user.is_logged_in:
     login_google_button_ui()
@@ -413,15 +160,6 @@ else:
         if resume is not None:
             # To read file as bytes:
             resume_bytes_data = resume.getvalue()
-
-        # Task 2.5
-        # Complete Streamlit framework code for the user interface, add the wine preference radio button to the interface.
-        # https://docs.streamlit.io/library/api-reference/widgets/st.radio
-
-        # wine = st.radio( "Select the wine: \n\n",
-        #         ["Red", "White", "None"],
-        #         key="wine",
-        #         horizontal=True,)
 
         max_output_tokens = 1500
 
@@ -551,8 +289,7 @@ else:
                 and prompt and resume_bytes_data and job_description):
             # st.write(prompt)
             with st.spinner("Generating response using Gemini..."):
-                # first_tab1, first_tab2 = st.tabs(["Recipes", "Prompt"])
-                # with first_tab1:
+
                 client = Client(api_key=os.getenv("API_KEY"))
                 # tokens = client.models.count_tokens(model="gemini-2.0-flash-001", contents=[
                 #     Part.from_bytes(data=resume_bytes_data, mime_type="application/pdf"),
@@ -560,17 +297,17 @@ else:
                 #     prompt
                 # ])
                 # print("tokens", tokens)
-                response = client.models.generate_content(model="gemini-2.0-flash-001", contents=[
+                response = client.models.generate_content(model="gemini-2.5-flash-001", contents=[
                     Part.from_bytes(data=resume_bytes_data, mime_type="application/pdf"),
                     job_description,
                     prompt
                 ],
-                                                          config=GenerateContentConfig(
-                                                              response_mime_type="application/json",
-                                                              response_schema=response_schema,
-                                                              max_output_tokens=1500,
-                                                              temperature=0.2
-                                                          ))
+                  config=GenerateContentConfig(
+                      response_mime_type="application/json",
+                      response_schema=response_schema,
+                      max_output_tokens=1500,
+                      temperature=0.2
+                  ))
 
                 if response:
                     st.markdown(":green[Response Generated!:white_check_mark:]")
