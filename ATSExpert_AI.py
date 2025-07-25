@@ -297,7 +297,7 @@ else:
                 #     prompt
                 # ])
                 # print("tokens", tokens)
-                response = client.models.generate_content(model="gemini-2.0-flash", contents=[
+                response = client.models.generate_content(model="gemini-2.5-flash", contents=[
                     Part.from_bytes(data=resume_bytes_data, mime_type="application/pdf"),
                     job_description,
                     prompt
@@ -312,11 +312,12 @@ else:
                 if response:
                     st.markdown(":green[Response Generated!:white_check_mark:]")
 
-                    response = json.loads(response.text)  # dict
                     # # response1 = json.dumps(json_response, indent=2)
                     # st.text(response)
                     # print(type(response1))
-                    # response = response.candidates[0].content.parts[0].text
+                    response = response.candidates[0].content.parts[0].text
+                    response = json.loads(response)  # dict
+
                     de_dulpicate_key = generatedResponse(response)
                     # st.write("Objectives : ", response['overall_enhanced_resume_sections']['projects'])
                     add_data(user_id, de_dulpicate_key, response)
